@@ -1,4 +1,4 @@
-# toolcahin (change if you havbe cros compiler)
+# toolchain im gonna stop these
 CC = gcc
 LD = ld
 OBJCOPY = objcopy
@@ -13,13 +13,13 @@ OBJS = $(BUILD)/kernel.o $(BUILD)/entry.o
 
 KERNEL_ELF = $(BUILD)/kernel.elf
 KERNEL_BIN = $(BUILD)/kernel.bin
+ISO_DIR = $(BUILD)/iso
 ISO = $(BUILD)/os.iso
 
 .PHONY: all clean iso run
 
 all: $(KERNEL_BIN)
 
-# ensure
 $(BUILD):
 	mkdir -p $(BUILD)
 
@@ -36,13 +36,13 @@ $(KERNEL_BIN): $(KERNEL_ELF)
 	$(OBJCOPY) -O binary $< $@
 
 iso: $(KERNEL_BIN)
-	mkdir -p iso/boot/grub
-	cp $(KERNEL_BIN) iso/boot/kernel.bin
-	cp iso/boot/grub/grub.cfg iso/boot/grub/grub.cfg
-	grub-mkrescue -o $(ISO) iso
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp $(KERNEL_BIN) $(ISO_DIR)/boot/kernel.bin
+	cp src/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
+	grub-mkrescue -o $(ISO) $(ISO_DIR)
 
 run: iso
 	qemu-system-i386 -cdrom $(ISO) -m 512M
 
 clean:
-	rm -rf $(BUILD) iso
+	rm -rf $(BUILD)
