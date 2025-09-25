@@ -25,7 +25,7 @@ all: $(KERNEL)
 kernel.o: src/kernel.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-entry.o: src/entry.S
+entry.o: src/entry.asm
 	nasm -f elf32 $< -o $@
 
 $(KERNEL): entry.o kernel.o linker.ld
